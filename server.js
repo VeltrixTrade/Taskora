@@ -311,6 +311,9 @@ async function migrate() {
     );
   `);
 
+  await query(`ALTER TABLE user_packages ADD COLUMN IF NOT EXISTS original_started_at TIMESTAMPTZ NOT NULL DEFAULT NOW();`);
+  await query(`ALTER TABLE user_packages ADD COLUMN IF NOT EXISTS cycle_count INTEGER NOT NULL DEFAULT 0;`);
+
   await query(`
     CREATE TABLE IF NOT EXISTS golden_tasks (
       id BIGSERIAL PRIMARY KEY,
@@ -380,6 +383,33 @@ async function migrate() {
   await query(`CREATE INDEX IF NOT EXISTS support_tickets_status_idx ON support_tickets (status);`);
 
 
+
+  await query(`
+    CREATE TABLE IF NOT EXISTS admin_user_notes (
+      id BIGSERIAL PRIMARY KEY,
+      user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      admin_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
+      note TEXT NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  await query(`
+    CREATE TABLE IF NOT EXISTS login_activity (
+      id BIGSERIAL PRIMARY KEY,
+      user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
+      ip_address VARCHAR(120),
+      user_agent TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  await query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS withdrawal_locked_until TIMESTAMPTZ;`);
+  await query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_withdrawal_wallet TEXT;`);
+  await query(`CREATE INDEX IF NOT EXISTS admin_user_notes_user_idx ON admin_user_notes (user_id, created_at DESC);`);
+  await query(`CREATE INDEX IF NOT EXISTS login_activity_user_idx ON login_activity (user_id, created_at DESC);`);
+
+
   await seedAdmin();
 }
 
@@ -417,7 +447,8 @@ async function addTransaction(client, userId, type, amount, description) {
 async function auth(req, res, next) {
   try {
     const header = req.headers.authorization || "";
-    const token = header.startsWith("Bearer ") ? header.slice(7) : null;
+    const altToken = req.headers["x-taskora-token"] || req.query.token || "";
+    const token = header.startsWith("Bearer ") ? header.slice(7) : (altToken || null);
     if (!token) return res.status(401).json({ error: "Unauthorized" });
     const payload = jwt.verify(token, JWT_SECRET);
     const result = await query("SELECT * FROM users WHERE id=$1", [payload.id]);
@@ -452,17 +483,19 @@ function publicUser(user) {
     status: user.status,
     avatar_url: user.avatar_url,
     avatar_updated_at: user.avatar_updated_at,
+    withdrawal_locked_until: user.withdrawal_locked_until,
     created_at: user.created_at
   };
 }
 
 const PACKAGES = [
-  { id: "bronze", name: "البرونزية", price: 10, tasks: 12 },
   { id: "silver", name: "الفضية", price: 25, tasks: 12 },
   { id: "gold", name: "الذهبية", price: 50, tasks: 12 },
   { id: "platinum", name: "البلاتينيوم", price: 100, tasks: 12 },
   { id: "vip", name: "VIP", price: 500, tasks: 12 },
-  { id: "diamond", name: "الماسية", price: 1000, tasks: 12 }
+  { id: "diamond", name: "الماسية", price: 1000, tasks: 12, monthly: true },
+  { id: "crown_vip", name: "VIP النخبة", price: 2000, tasks: 12, monthly: true },
+  { id: "royal_vip", name: "VIP التاج", price: 3000, tasks: 12, monthly: true }
 ];
 
 const DAILY_TASKS = [
@@ -477,7 +510,11 @@ const DAILY_TASKS = [
   "محاكاة مراجعة طلب تذكرة VIP",
   "محاكاة إغلاق طلب حجز فعالية",
   "محاكاة تأكيد تذكرة مهرجان",
-  "محاكاة مراجعة طلب تذكرة رياضية"
+  "محاكاة مراجعة طلب تذكرة رياضية",
+  "محاكاة تأكيد حجز تذكرة طيران",
+  "محاكاة معالجة طلب اشتراك برونزي",
+  "محاكاة بيع تذكرة عرض كوميدي",
+  "محاكاة مراجعة حجز قاعة مؤتمرات"
 ];
 
 app.get("/health", async (_req, res) => {
@@ -611,7 +648,7 @@ app.post("/api/auth/change-password", auth, async (req, res) => {
   const ok = await bcrypt.compare(currentPassword, req.user.password_hash);
   if (!ok) return res.status(401).json({ error: "Current password is incorrect." });
   const passwordHash = await bcrypt.hash(newPassword, 12);
-  await query("UPDATE users SET password_hash=$1 WHERE id=$2", [passwordHash, req.user.id]);
+  await query("UPDATE users SET password_hash=$1, withdrawal_locked_until=NOW() + interval '24 hours' WHERE id=$2", [passwordHash, req.user.id]);
   await createNotification(pool, req.user.id, "تم تغيير كلمة المرور", "تم تغيير كلمة مرور حسابك بنجاح.", "success");
   res.json({ success: true });
 });
@@ -830,20 +867,41 @@ app.post("/api/tasks/daily/:number/complete", auth, async (req, res) => {
     const newCompleted = [...completed, taskNumber].sort((a,b) => a-b);
     const newCount = newCompleted.length;
 
+    const isMonthly = ["diamond", "crown_vip", "royal_vip"].includes(pkg.package_id);
+    const originalStart = pkg.original_started_at ? new Date(pkg.original_started_at).getTime() : new Date(pkg.started_at).getTime();
+    const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+    const monthlyExpired = isMonthly && (Date.now() - originalStart >= thirtyDays);
+
     if (newCount >= 12) {
       const userRes = await client.query("SELECT balance, package_balance, package_profit FROM users WHERE id=$1 FOR UPDATE", [req.user.id]);
       const user = userRes.rows[0];
       const updatedProfit = Number(user.package_profit) + reward;
-      const unlocked = Number(user.package_balance) + updatedProfit;
-      const before = Number(user.balance);
-      const after = before + unlocked;
 
-      await client.query("UPDATE users SET balance=$1, package_balance=0, package_profit=0 WHERE id=$2", [after, req.user.id]);
-      await client.query("UPDATE user_packages SET completed_tasks=$1, completed_count=12, status='completed', completed_at=NOW() WHERE id=$2", [JSON.stringify(newCompleted), pkg.id]);
-      await client.query(`
-        INSERT INTO transactions (user_id, type, amount, description, balance_before, balance_after)
-        VALUES ($1,'package_unlocked',$2,'تحويل رصيد الباقة والربح إلى الرصيد المتاح بعد إكمال 12 مهمة',$3,$4)
-      `, [req.user.id, unlocked, before, after]);
+      if (isMonthly && !monthlyExpired) {
+        const before = Number(user.balance);
+        const after = before + updatedProfit;
+        
+        await client.query("UPDATE users SET balance=$1, package_profit=0 WHERE id=$2", [after, req.user.id]);
+        await client.query("UPDATE user_packages SET completed_tasks='[]', completed_count=0, started_at=NOW(), cycle_count=cycle_count+1 WHERE id=$1", [pkg.id]);
+        await client.query(`
+          INSERT INTO transactions (user_id, type, amount, description, balance_before, balance_after)
+          VALUES ($1,'package_cycle_profit',$2,'تحويل ربح دورة الباقة الشهرية إلى الرصيد المتاح بعد إكمال 12 مهمة',$3,$4)
+        `, [req.user.id, updatedProfit, before, after]);
+        
+        await client.query("COMMIT");
+        return res.json({ success: true, completed_count: 0, cycle_completed: true });
+      } else {
+        const unlocked = Number(user.package_balance) + updatedProfit;
+        const before = Number(user.balance);
+        const after = before + unlocked;
+
+        await client.query("UPDATE users SET balance=$1, package_balance=0, package_profit=0 WHERE id=$2", [after, req.user.id]);
+        await client.query("UPDATE user_packages SET completed_tasks=$1, completed_count=12, status='completed', completed_at=NOW() WHERE id=$2", [JSON.stringify(newCompleted), pkg.id]);
+        await client.query(`
+          INSERT INTO transactions (user_id, type, amount, description, balance_before, balance_after)
+          VALUES ($1,'package_unlocked',$2,$3,$4,$5)
+        `, [req.user.id, unlocked, isMonthly ? 'انتهاء الباقة الشهرية بالكامل وتحرير رأس المال والأرباح' : 'تحويل رصيد الباقة والربح إلى الرصيد المتاح بعد إكمال 12 مهمة', before, after]);
+      }
     } else {
       await client.query("UPDATE users SET package_profit=package_profit+$1 WHERE id=$2", [reward, req.user.id]);
       await client.query("UPDATE user_packages SET completed_tasks=$1, completed_count=$2 WHERE id=$3", [JSON.stringify(newCompleted), newCount, pkg.id]);
@@ -1207,7 +1265,7 @@ app.get("/api/admin/users/:id/detail", auth, adminOnly, async (req, res) => {
   const userId = Number(req.params.id);
   if (!userId) return res.status(422).json({ error: "Invalid user." });
 
-  const [user, kyc, deposits, withdrawals, packages, transactions, adjustments, golden] = await Promise.all([
+  const [user, kyc, deposits, withdrawals, packages, transactions, adjustments, golden, notes, loginActivity] = await Promise.all([
     query("SELECT id,username,email,phone,role,balance,package_balance,package_profit,referral_code,kyc_status,bonus_claimed,status,created_at FROM users WHERE id=$1", [userId]),
     query("SELECT id,document_type,full_name,document_number,front_image,back_image,selfie_image,status,admin_note,reviewed_at,created_at FROM user_kyc WHERE user_id=$1 ORDER BY id DESC", [userId]),
     query("SELECT * FROM deposits WHERE user_id=$1 ORDER BY id DESC", [userId]),
@@ -1215,7 +1273,9 @@ app.get("/api/admin/users/:id/detail", auth, adminOnly, async (req, res) => {
     query("SELECT * FROM user_packages WHERE user_id=$1 ORDER BY id DESC", [userId]),
     query("SELECT * FROM transactions WHERE user_id=$1 ORDER BY id DESC LIMIT 100", [userId]),
     query("SELECT * FROM admin_balance_adjustments WHERE user_id=$1 ORDER BY id DESC LIMIT 100", [userId]),
-    query("SELECT * FROM golden_tasks WHERE user_id=$1 ORDER BY id DESC", [userId])
+    query("SELECT * FROM golden_tasks WHERE user_id=$1 ORDER BY id DESC", [userId]),
+    query("SELECT n.*, a.username AS admin_username FROM admin_user_notes n LEFT JOIN users a ON a.id=n.admin_id WHERE n.user_id=$1 ORDER BY n.id DESC LIMIT 100", [userId]),
+    query("SELECT * FROM login_activity WHERE user_id=$1 ORDER BY id DESC LIMIT 50", [userId])
   ]);
 
   if (user.rowCount === 0) return res.status(404).json({ error: "User not found." });
@@ -1227,7 +1287,102 @@ app.get("/api/admin/users/:id/detail", auth, adminOnly, async (req, res) => {
     packages: packages.rows,
     transactions: transactions.rows,
     adjustments: adjustments.rows,
-    golden_tasks: golden.rows
+    golden_tasks: golden.rows,
+    notes: notes.rows,
+    login_activity: loginActivity.rows
+  });
+});
+
+
+
+app.post("/api/admin/users/:id/notes", auth, adminOnly, async (req, res) => {
+  const userId = Number(req.params.id);
+  const note = normalize(req.body.note);
+  if (!userId) return res.status(422).json({ error: "Invalid user." });
+  if (!note || note.length < 2) return res.status(422).json({ error: "Note is required." });
+
+  const exists = await query("SELECT id FROM users WHERE id=$1 AND role!='admin'", [userId]);
+  if (exists.rowCount === 0) return res.status(404).json({ error: "User not found." });
+
+  const result = await query(`
+    INSERT INTO admin_user_notes (user_id, admin_id, note)
+    VALUES ($1,$2,$3)
+    RETURNING *
+  `, [userId, req.user.id, note]);
+
+  await logAdminAction(pool, req.user.id, "add_admin_note", "user", userId, { note });
+  res.status(201).json({ note: result.rows[0] });
+});
+
+app.get("/api/account/status", auth, async (req, res) => {
+  const pkg = await query("SELECT * FROM user_packages WHERE user_id=$1 ORDER BY id DESC LIMIT 1", [req.user.id]);
+  const pendingWithdrawals = await query("SELECT COUNT(*)::int AS count FROM withdrawals WHERE user_id=$1 AND status='pending'", [req.user.id]);
+  const approvedDeposits = await query("SELECT COUNT(*)::int AS count FROM deposits WHERE user_id=$1 AND status='approved'", [req.user.id]);
+  const completedPackages = await query("SELECT COUNT(*)::int AS count FROM user_packages WHERE user_id=$1 AND status='completed'", [req.user.id]);
+  const completedTasks = await query("SELECT COALESCE(SUM(completed_count),0)::int AS count FROM user_packages WHERE user_id=$1", [req.user.id]);
+  const referrals = await query("SELECT COUNT(*)::int AS count FROM users WHERE referred_by=$1", [req.user.id]);
+
+  const activePackage = pkg.rows[0] || null;
+  const checks = [
+    { key: "email", label: "البريد مؤكد", ok: !!req.user.email_verified },
+    { key: "kyc", label: "الحساب موثق", ok: req.user.kyc_status === "verified" },
+    { key: "package", label: "الباقة نشطة أو مكتملة", ok: !!activePackage },
+    { key: "withdrawals", label: "لا توجد سحوبات معلقة", ok: pendingWithdrawals.rows[0].count === 0 },
+    { key: "status", label: "الحساب غير محظور", ok: req.user.status === "active" }
+  ];
+
+  const missing = [];
+  if (!req.user.email_verified) missing.push("أكد بريدك الإلكتروني");
+  if (req.user.kyc_status !== "verified") missing.push("أكمل توثيق الحساب");
+  if (!activePackage) missing.push("اختر باقة مناسبة");
+  if (activePackage && Number(activePackage.completed_count || 0) < 12) missing.push("أكمل مهام الباقة");
+  if (Number(req.user.balance || 0) <= 0) missing.push("اجعل لديك رصيد متاح قبل السحب");
+
+  const completedTasksCount = Number(completedTasks.rows[0].count || 0);
+  const completedPackagesCount = Number(completedPackages.rows[0].count || 0);
+  const approvedDepositsCount = Number(approvedDeposits.rows[0].count || 0);
+  const referralCount = Number(referrals.rows[0].count || 0);
+  const score = completedTasksCount + completedPackagesCount * 12 + approvedDepositsCount * 8 + referralCount * 4;
+
+  let level = "Beginner";
+  if (score >= 160) level = "VIP";
+  else if (score >= 95) level = "Elite";
+  else if (score >= 50) level = "Pro";
+  else if (score >= 15) level = "Active";
+
+  res.json({
+    checks,
+    missing,
+    level,
+    score,
+    stats: {
+      completed_tasks: completedTasksCount,
+      completed_packages: completedPackagesCount,
+      approved_deposits: approvedDepositsCount,
+      referral_count: referralCount
+    }
+  });
+});
+
+app.get("/api/referrals", auth, async (req, res) => {
+  const invited = await query(`
+    SELECT u.id, u.username, u.email, u.created_at,
+      COALESCE((SELECT SUM(amount) FROM deposits d WHERE d.user_id=u.id AND d.status='approved'),0)::numeric AS approved_deposits
+    FROM users u
+    WHERE u.referred_by=$1
+    ORDER BY u.id DESC
+  `, [req.user.id]);
+
+  const bonus = await query(`
+    SELECT COALESCE(SUM(amount),0)::numeric AS total
+    FROM transactions
+    WHERE user_id=$1 AND type LIKE '%referral%'
+  `, [req.user.id]);
+
+  res.json({
+    referral_code: req.user.referral_code,
+    invited: invited.rows.map(r => ({ ...r, approved_deposits: Number(r.approved_deposits) })),
+    total_bonus: Number(bonus.rows[0].total || 0)
   });
 });
 

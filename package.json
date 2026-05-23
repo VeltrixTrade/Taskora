@@ -1,7 +1,7 @@
 {
   "name": "taskora-real-railway",
-  "version": "1.8.9",
-  "description": "Taskora Real MVP v10.9 hard Railway root route fix",
+  "version": "2.0.3",
+  "description": "Taskora v12.3 packages and tasks display fix",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
