@@ -269,8 +269,151 @@
     .status.pending{background:#fef3c7;color:#92400e}.status.verified,.status.approved,.status.active,.status.completed{background:rgba(108,77,255,.14);color:#a78bfa}.status.rejected{background:#fee2e2;color:#991b1b}
     .package-card{display:flex;flex-direction:column;gap:12px;min-height:360px}
     .price{font-family:Inter,Tajawal,sans-serif;direction:ltr;font-size:38px;font-weight:900;color:#a78bfa}
+    .site-footer {
+      background: linear-gradient(180deg, rgba(11, 18, 32, 0.98) 0%, rgba(7, 11, 20, 0.99) 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 60px 0 30px 0;
+      margin-top: 80px;
+      font-family: Tajawal, Inter, sans-serif;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .site-footer .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .site-footer .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      margin-bottom: 50px;
+    }
+    @media(max-width: 900px) {
+      .site-footer .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media(max-width: 500px) {
+      .site-footer .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .site-footer .footer-col h4 {
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 22px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    .site-footer .footer-col h4::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+      border-radius: 2px;
+    }
+    .site-footer .footer-col p {
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+    .site-footer .footer-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .site-footer .footer-col ul li {
+      margin-bottom: 12px;
+    }
+    .site-footer .footer-col ul li a, .site-footer .footer-col ul li button {
+      color: rgba(255, 255, 255, 0.65);
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      text-align: right;
+      font-weight: 500;
+    }
+    .site-footer .footer-col ul li a:hover, .site-footer .footer-col ul li button:hover {
+      color: var(--blue);
+      padding-right: 5px;
+    }
+    .site-footer .footer-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      direction: rtl;
+    }
+    .site-footer .footer-contact-item i {
+      color: var(--blue);
+      font-size: 16px;
+    }
+    .site-footer .footer-socials {
+      display: flex;
+      gap: 12px;
+      margin-top: 15px;
+    }
+    .site-footer .footer-socials a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .site-footer .footer-socials a:hover {
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      border-color: transparent;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(108, 77, 255, 0.3);
+    }
+    .site-footer .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      font-size: 13px;
+    }
+    @media(max-width: 768px) {
+      .site-footer .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+    .site-footer .footer-bottom p {
+      margin: 0;
+    }
+    .site-footer .footer-license-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(247, 181, 0, 0.08);
+      border: 1px solid rgba(247, 181, 0, 0.22);
+      color: #F7B500;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+    }
     .hidden{display:none!important}.mt{margin-top:16px}.muted{color:var(--muted)}
-    footer{text-align:center;color:var(--muted);padding:30px;border-top:1px solid var(--border);margin-top:60px}
     @media(max-width:900px){.hero-grid,.grid-3,.grid-2,.stats{grid-template-columns:1fr}.visual{min-height:360px}.dashboard-mock{inset:32px 18px}.nav-inner{align-items:flex-start;flex-direction:column}.mock-grid{grid-template-columns:1fr}}
 
     .admin-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
@@ -1273,6 +1416,45 @@
       background: rgba(108, 77, 255, 0.18);
       border-color: rgba(108, 77, 255, 0.35);
     }
+    
+    /* Tagline Scroll Animations and Layout overrides */
+    .brand div small {
+      opacity: 1;
+      max-height: 20px;
+      margin-top: 2px;
+      transform: translateY(0);
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), max-height 0.3s ease, margin-top 0.3s ease, transform 0.3s ease;
+      display: block;
+      overflow: hidden;
+    }
+    .brand div small.scrolled-tagline {
+      opacity: 0 !important;
+      max-height: 0px !important;
+      margin-top: 0px !important;
+      transform: translateY(-4px) !important;
+      pointer-events: none;
+    }
+    .brand div small.hidden-tagline {
+      opacity: 0 !important;
+      max-height: 0px !important;
+      margin-top: 0px !important;
+      transform: translateY(-4px) !important;
+      pointer-events: none;
+    }
+    
+    /* Side-by-side controls layout nowrap overrides */
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: nowrap !important;
+    }
+    .nav-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap !important;
+      align-items: center;
+    }
   </style>
   <link rel="manifest" href="/manifest.json">
 </head>
@@ -1595,7 +1777,7 @@
             "سحب وإيداع": "Withdraw & Deposit",
             "محافظ واضحة، QR Code، ومراجعة إدارية لكل عملية.": "Clear wallets, QR Code, and administrative review for each transaction.",
             "شراء باقة مناسبة من الرصيد": "Purchase appropriate package from balance",
-            "إكمال 16 مهمة حسب جدول الباقة": "Complete 16 tasks according to package schedule",
+            "إكمال 12 مهمة حسب جدول الباقة": "Complete 12 tasks according to package schedule",
             "تحويل الرصيد والربح المستهدف إلى المتاح": "Transfer balance and target profit to available",
             "كيف تبدأ داخل Taskora؟": "How to start in Taskora?",
             "خطوات بسيطة وواضحة من إنشاء الحساب حتى إرسال طلب السحب.": "Simple and clear steps from account creation to sending the withdrawal request.",
@@ -1817,7 +1999,6 @@
     <section class="investment-showcase container">
       <div class="public-title">
         <h2>نظام باقات بعائد مستهدف 10%</h2>
-        <p>Taskora تعرض تجربة منظمة للباقات والمهام اليومية، حيث يظهر العائد المستهدف بعد إكمال شروط الباقة والمهام المطلوبة.</p>
       </div>
       <div class="investment-grid">
         <div class="investment-card">
@@ -1832,7 +2013,6 @@
               </div>
             </div>
           </div>
-          <div class="home-disclaimer">العائد الموضح ليس وعدًا ماليًا مستقلًا؛ يظهر وفق نظام الباقات، شروط المنصة، وإكمال المهام داخل الحساب.</div>
         </div>
         <div>
           <div class="premium-visual-grid">
@@ -1864,35 +2044,11 @@
       </div>
     </section>
 
-    <section class="public-section container">
-      <div class="public-title">
-        <h2>الإيداع والسحب بواجهة واضحة</h2>
-        <p>كل عملية لها حالة واضحة: قيد المراجعة، مقبولة، أو مرفوضة.</p>
-      </div>
-      <div class="payment-grid">
-        <div class="payment-visual">
-          <div class="wallet-card">
-            <h3>محفظة Taskora</h3>
-            <div class="wallet-row"><span>USDT</span><b>$1,250.00</b></div>
-            <div class="wallet-row"><span>BNB</span><b>$500.00</b></div>
-            <div class="wallet-row"><span>ETH</span><b>$320.00</b></div>
-            <div class="wallet-row"><span>BTC</span><b>$2,100.00</b></div>
-          </div>
-          <div class="network-card"><b>Networks</b><p>TRC20 • BEP20 • ERC20 • BTC</p></div>
-        </div>
-        <div class="grid-2">
-          <div class="card"><h3>إيداع منظم</h3><p>يعرض الموقع عنوان المحفظة حسب العملة والشبكة، ثم يرسل المستخدم TXID للمراجعة.</p></div>
-          <div class="card"><h3>سحب بعد التوثيق</h3><p>لا يتم إرسال طلب السحب إلا إذا كان الحساب موثقًا ومكتمل البيانات.</p></div>
-          <div class="card"><h3>سجل معاملات</h3><p>كل عملية تظهر في سجل المستخدم لتسهيل المتابعة والشفافية.</p></div>
-          <div class="card"><h3>حالات واضحة</h3><p>قيد المراجعة، مقبول، مرفوض، أو مكتمل — بدون غموض للمستخدم.</p></div>
-        </div>
-      </div>
-    </section>
+
 
     <section class="public-section container">
       <div class="public-title">
         <h2>آراء وتجارب من واجهة العرض</h2>
-        <p>نماذج تعليقات توضيحية تساعد على عرض شكل قسم التقييمات داخل الموقع.</p>
       </div>
       <div class="testimonial-wall">
         <div class="card testimonial-card"><div class="avatar">A</div><b>أحمد</b><div class="stars">★★★★★</div><p>الواجهة مرتبة وواضحة، وخطوات الإيداع والسحب مفهومة من أول استخدام.</p></div>
@@ -1902,20 +2058,9 @@
         <div class="card testimonial-card"><div class="avatar">K</div><b>كريم</b><div class="stars">★★★★★</div><p>الانتقالات والحركات تعطي الموقع طابعًا حديثًا بدون تعقيد.</p></div>
         <div class="card testimonial-card"><div class="avatar">L</div><b>ليان</b><div class="stars">★★★★★</div><p>أكثر ما يميز التجربة هو وضوح الشروط قبل طلب السحب.</p></div>
       </div>
-      <div class="landing-note">هذه التعليقات نماذج عرض تصميمية وليست مراجعات حقيقية من مستخدمين فعليين.</div>
     </section>
 
-    <section class="public-section container">
-      <div class="public-title">
-        <h2>تجربة بصرية جاهزة للويب والتطبيق</h2>
-        <p>تصميم حديث يناسب الموقع اليوم، ويمكن تحويله لاحقًا إلى تطبيق جوال.</p>
-      </div>
-      <div class="gallery-grid">
-        <div class="gallery-tile tall"><div class="tile-content"><h3>لوحة مهام</h3><p>متابعة تقدم يومي وبطاقات منظمة.</p></div></div>
-        <div class="gallery-tile"><div class="tile-content"><h3>توثيق</h3><p>حماية الحساب قبل السحب.</p></div></div>
-        <div class="gallery-tile tall"><div class="tile-content"><h3>محفظة</h3><p>إيداع وسحب عبر العملات المدعومة.</p></div></div>
-      </div>
-    </section>
+
 
 
 
@@ -1957,17 +2102,100 @@
           <button class="tab active" id="loginTab" onclick="setAuthMode('login')">دخول</button>
           <button class="tab" id="registerTab" onclick="setAuthMode('register')">إنشاء حساب</button>
         </div>
-        <div id="registerFields" class="hidden">
-          <label>Username</label><input id="regUsername" placeholder="mustafa_123">
-          <label>رقم الهاتف</label><input id="regPhone" placeholder="+964...">
-          <label>كود الدعوة - اختياري</label><input id="regReferral" placeholder="CODE">
+        
+        <!-- Login Form Fields -->
+        <div id="loginFields">
+          <label>البريد أو اسم المستخدم</label>
+          <input id="authLogin" placeholder="email أو username">
+          <label>كلمة المرور</label>
+          <input id="authPassword" type="password" placeholder="8 خانات، حروف وأرقام">
+          <button class="btn full mt" onclick="requestPasswordReset()">نسيت كلمة المرور؟</button>
+          <div id="passwordResetBox"></div>
         </div>
-        <label>البريد أو username</label><input id="authLogin" placeholder="email أو username">
-        <label id="emailLabel" class="hidden">البريد الإلكتروني</label><input id="regEmail" class="hidden" placeholder="you@email.com">
-        <label>كلمة المرور</label><input id="authPassword" type="password" placeholder="8 خانات، حروف وأرقام">
+
+        <!-- Registration Form Fields -->
+        <div id="registerFields" class="hidden">
+          <!-- 1. Username (يوزر) -->
+          <label>اسم المستخدم (Username)</label>
+          <input id="regUsername" placeholder="alex_smith">
+          
+          <!-- 2. Phone Number (رقم الهاتف) -->
+          <label>رقم الهاتف</label>
+          <div class="phone-input-group" style="display: flex; gap: 8px; align-items: center; direction: ltr; margin-bottom: 12px;">
+            <select id="regCountryCode" style="width: 110px; background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(108, 77, 255, 0.2); border-radius: 8px; height: 42px; padding: 0 8px; font-size: 14px; outline: none; cursor: pointer;">
+              <option value="+966">🇸🇦 +966</option>
+              <option value="+964" selected>🇮🇶 +964</option>
+              <option value="+971">🇦🇪 +971</option>
+              <option value="+974">🇶🇦 +974</option>
+              <option value="+965">🇰🇼 +965</option>
+              <option value="+968">🇴🇲 +968</option>
+              <option value="+973">🇧🇭 +973</option>
+              <option value="+20">🇪🇬 +20</option>
+              <option value="+962">🇯🇴 +962</option>
+              <option value="+961">🇱🇧 +961</option>
+              <option value="+963">🇸🇾 +963</option>
+              <option value="+970">🇵🇸 +970</option>
+              <option value="+967">🇾🇪 +967</option>
+              <option value="+218">🇱🇾 +218</option>
+              <option value="+216">🇹🇳 +216</option>
+              <option value="+213">🇩🇿 +213</option>
+              <option value="+212">🇲🇦 +212</option>
+              <option value="+249">🇸🇩 +249</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+61">🇦🇺 +61</option>
+              <option value="+49">🇩🇪 +49</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+90">🇹🇷 +90</option>
+              <option value="+91">🇮🇳 +91</option>
+              <option value="+92">🇵🇰 +92</option>
+              <option value="+880">🇧🇩 +880</option>
+              <option value="+7">🇷🇺 +7</option>
+              <option value="+86">🇨🇳 +86</option>
+              <option value="+81">🇯🇵 +81</option>
+              <option value="+60">🇲🇾 +60</option>
+              <option value="+65">🇸🇬 +65</option>
+              <option value="+62">🇮🇩 +62</option>
+              <option value="+39">🇮🇹 +39</option>
+              <option value="+34">🇪🇸 +34</option>
+              <option value="+31">🇳🇱 +31</option>
+              <option value="+46">🇸🇪 +46</option>
+              <option value="+41">🇨🇭 +41</option>
+              <option value="+32">🇧🇪 +32</option>
+              <option value="+43">🇦🇹 +43</option>
+              <option value="+55">🇧🇷 +55</option>
+              <option value="+27">🇿🇦 +27</option>
+              <option value="+234">🇳🇬 +234</option>
+            </select>
+            <input id="regPhone" placeholder="7700000000" style="flex: 1; height: 42px; margin: 0;">
+          </div>
+          
+          <!-- 3. Email (البريد الإلكتروني) -->
+          <label>البريد الإلكتروني</label>
+          <input id="regEmail" placeholder="you@email.com">
+          
+          <!-- 4. Password (كلمة المرور) -->
+          <label>كلمة المرور</label>
+          <input id="regPassword" type="password" placeholder="8 خانات، حروف وأرقام">
+          
+          <!-- 5. Invitation Code (كود الدعوة) -->
+          <label>كود الدعوة - اختياري</label>
+          <input id="regReferral" placeholder="CODE">
+          
+          <!-- Terms & Agreement Checkboxes -->
+          <div class="auth-checkbox-group" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px; text-align: right; direction: rtl;">
+            <label style="display: flex; align-items: flex-start; gap: 8px; color: var(--text); font-size: 13px; cursor: pointer; user-select: none;">
+              <input type="checkbox" id="regTerms" style="width: 18px; height: 18px; border-radius: 4px; accent-color: var(--primary); cursor: pointer; margin-top: 2px;">
+              <span>أوافق على <a href="#" onclick="openPolicy('terms'); return false;" style="color: var(--primary); text-decoration: underline;">الشروط والأحكام</a> والسياسات الخاصة بالمنصة. <span style="color: var(--red);">*</span></span>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 8px; color: var(--text-muted); font-size: 13px; cursor: pointer; user-select: none;">
+              <input type="checkbox" id="regNews" style="width: 18px; height: 18px; border-radius: 4px; accent-color: var(--primary); cursor: pointer; margin-top: 2px;">
+              <span>أرغب في تلقي الأخبار والتحديثات الدورية عبر البريد الإلكتروني.</span>
+            </label>
+          </div>
+        </div>
+
         <button class="btn primary full mt" onclick="submitAuth()">متابعة</button>
-        <button class="btn full mt" onclick="requestPasswordReset()">نسيت كلمة المرور؟</button>
-        <div id="passwordResetBox"></div>
         
       </div>
     </div>
@@ -2013,11 +2241,11 @@
             <button class="user-nav" data-dash="settings" onclick="setDash('settings')">الأمان <svg class="nav-svg-icon" viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></button>
             <button class="user-nav" data-dash="help" onclick="setDash('help')">المساعدة <svg class="nav-svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
             <button class="user-nav" data-dash="support" onclick="setDash('support')">الدعم <svg class="nav-svg-icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
-            <button class="user-nav adminOnly hidden" data-dash="admin" onclick="setDash('admin')">لوحة الأدمن <svg class="nav-svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+            <button class="user-nav adminOnly hidden" data-dash="admin" onclick="setDash('admin')">لوحة الإدارة <svg class="nav-svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
           </div>
           <div class="side-title">معلومات واقعية</div>
           <div class="detail-chip"><b>السحب</b>متاح فقط للحسابات الموثقة.</div>
-          <div class="detail-chip mt"><b>المهام</b>كل باقة تحتوي 16 مهمة موزعة يوميًا.</div>
+          <div class="detail-chip mt"><b>المهام</b>كل باقة تحتوي 12 مهمة موزعة يوميًا.</div>
         </aside>
 
         <main class="user-main">
@@ -2048,7 +2276,78 @@
   </section>
 
   <div id="adminModal" class="modal-backdrop"></div>
-  <footer>Taskora Real MVP - Railway + PostgreSQL</footer>
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>عن المنصة وتراخيصنا</h4>
+          <p>Taskora هي منصة تقنية عالمية رائدة لإدارة وتوثيق المهام اليومية بكفاءة عالية، مرخصة وموثوقة لتقديم خدمات استثنائية وآمنة بالكامل لشركائنا حول العالم.</p>
+          <div style="margin-top: 15px;">
+            <div class="footer-license-badge">
+              <i>🛡️</i> رقم الترخيص التجاري: CY-78945621
+            </div>
+          </div>
+          <div style="margin-top: 10px;">
+            <div class="footer-license-badge">
+              <i>⚖️</i> شهادة الامتثال والأنظمة: SEC-2026
+            </div>
+          </div>
+        </div>
+        
+        <div class="footer-col">
+          <h4>المنتجات ومنصاتنا</h4>
+          <ul>
+            <li><a href="#" onclick="event.preventDefault();">باقات المهام الذكية</a></li>
+            <li><a href="#" onclick="event.preventDefault();">منصة النمو والاستثمار الذكي</a></li>
+            <li><a href="#" onclick="event.preventDefault();">نظام توثيق الهوية والـ KYC</a></li>
+            <li><a href="#" onclick="event.preventDefault();">تطبيق الويب المتقدم (PWA)</a></li>
+            <li><a href="#" onclick="event.preventDefault();">بوابة المحفظة الرقمية والإيداع</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>روابط قانونية وحساباتنا</h4>
+          <ul>
+            <li><button onclick="openPolicy('terms')">الشروط والأحكام العامة</button></li>
+            <li><button onclick="openPolicy('privacy')">سياسة الخصوصية وحماية البيانات</button></li>
+            <li><button onclick="openPolicy('payments')">سياسة الإيداع والسحب الفوري</button></li>
+            <li><button onclick="openPolicy('security')">مركز الأمان وحماية المستخدم</button></li>
+          </ul>
+          <div class="footer-socials">
+            <a href="https://t.me/taskora_official" target="_blank" title="تيليجرام الرسمي">✈️</a>
+            <a href="https://twitter.com/taskora" target="_blank" title="إكس (تويتر)">𝕏</a>
+            <a href="https://t.me/taskora_support" target="_blank" title="الدعم الفني المباشر">💬</a>
+            <a href="mailto:support@taskora.com" title="راسل الإدارة">✉️</a>
+          </div>
+        </div>
+        
+        <div class="footer-col">
+          <h4>اتصل بموقعنا في قبرص</h4>
+          <div class="footer-contact-item">
+            <i>📍</i>
+            <span>مبنى تاسكورا، الطابق الرابع، شارع الاستقلال 45، ليماسول، قبرص</span>
+          </div>
+          <div class="footer-contact-item" style="direction: ltr; justify-content: flex-end;">
+            <span style="margin-right: 10px;">+357 25 896 450</span>
+            <i>📞</i>
+          </div>
+          <div class="footer-contact-item">
+            <i>✉️</i>
+            <span>support@taskora.com</span>
+          </div>
+          <div class="footer-contact-item">
+            <i>🕒</i>
+            <span>ساعات العمل: الاثنين - الجمعة (9:00 ص - 6:00 م)</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>© 2026 جميع الحقوق محفوظة لشركة Taskora Ltd. مرخصة وخاضعة لقوانين تنظيم الخدمات المالية في جمهورية قبرص.</p>
+        <p>التصميم الآمن والمتطور • الإصدار 12.3.5</p>
+      </div>
+    </div>
+  </footer>
 
 <script>
 const API = "";
@@ -2164,9 +2463,25 @@ function setAvatarElements(avatarUrl, username){
   const initialText = ((username || "T").slice(0,1)).toUpperCase();
   if(initial) initial.textContent = initialText;
   const applyImage = (src) => {
-    if(img){ img.src = src; img.classList.remove("hidden"); }
+    if(img){
+      img.src = src;
+      img.classList.remove("hidden");
+      img.onerror = () => {
+        img.removeAttribute("src");
+        img.classList.add("hidden");
+        if(initial) initial.classList.remove("hidden");
+      };
+    }
     if(initial) initial.classList.add("hidden");
-    if(preview) preview.innerHTML = `<img src="${src}" alt="Avatar">`;
+    if(preview) {
+      preview.innerHTML = `<img src="${src}" alt="Avatar">`;
+      const previewImg = preview.querySelector("img");
+      if (previewImg) {
+        previewImg.onerror = () => {
+          preview.textContent = initialText;
+        };
+      }
+    }
   };
   const clearImage = () => {
     if(img){ img.removeAttribute("src"); img.classList.add("hidden"); }
@@ -2218,11 +2533,51 @@ function showView(v){
       el.classList.add("page-transition");
     }
   });
+  
+  // Toggle footer visibility
+  const footerEl = document.querySelector(".site-footer");
+  if (footerEl) {
+    footerEl.style.display = (v === "home") ? "block" : "none";
+  }
+  
+  // Tagline visibility helper
+  updateBrandSubVisibility(v);
   renderNav();
 }
 function toggleUserSide(){ document.getElementById("userSide")?.classList.toggle("open"); document.getElementById("userOverlay")?.classList.toggle("open"); }
 function closeUserSide(){ document.getElementById("userSide")?.classList.remove("open"); document.getElementById("userOverlay")?.classList.remove("open"); }
 function toggleCollapseUserSide(){ document.body.classList.toggle("user-menu-collapsed"); }
+
+// Tagline scroll fade & active view visibility handlers
+function updateBrandSubVisibility(view) {
+  const brandSub = document.querySelector('.brand div small');
+  if (!brandSub) return;
+  
+  if (view === 'dashboard') {
+    brandSub.classList.remove('hidden-tagline');
+    handleScrollTagline();
+  } else {
+    brandSub.classList.add('hidden-tagline');
+  }
+}
+
+function handleScrollTagline() {
+  const brandSub = document.querySelector('.brand div small');
+  if (!brandSub) return;
+  
+  const isDash = document.getElementById("dashboardView").style.display === "block";
+  if (isDash) {
+    if (window.scrollY > 40) {
+      brandSub.classList.add('scrolled-tagline');
+    } else {
+      brandSub.classList.remove('scrolled-tagline');
+    }
+  } else {
+    brandSub.classList.add('hidden-tagline');
+  }
+}
+
+window.addEventListener('scroll', handleScrollTagline);
 
 function renderNav(){
   const nav = document.getElementById("navActions");
@@ -2234,7 +2589,7 @@ function renderNav(){
 
   nav.innerHTML = `
     <button class="btn" onclick="showView('home')">${tHome}</button>
-    ${token ? `<button class="btn primary" onclick="loadMe()">${tDashboard}</button><button class="btn red" onclick="logout()">${tLogout}</button>` : `<button class="btn primary" onclick="showView('auth')">${tLogin}</button>`}
+    ${token ? `<button class="btn" onclick="loadMe()">${tDashboard}</button><button class="btn" onclick="logout()">${tLogout}</button>` : `<button class="btn" onclick="showView('auth')">${tLogin}</button>`}
   `;
 }
 function setAuthMode(m){
@@ -2242,8 +2597,7 @@ function setAuthMode(m){
   document.getElementById("loginTab").classList.toggle("active",m==="login");
   document.getElementById("registerTab").classList.toggle("active",m==="register");
   document.getElementById("registerFields").classList.toggle("hidden",m!=="register");
-  document.getElementById("regEmail").classList.toggle("hidden",m!=="register");
-  document.getElementById("emailLabel").classList.toggle("hidden",m!=="register");
+  document.getElementById("loginFields").classList.toggle("hidden",m!=="login");
   document.getElementById("authTitle").innerText = m==="login" ? "تسجيل الدخول" : "إنشاء حساب حقيقي";
 }
 async function api(path, opts={}){
@@ -2269,16 +2623,23 @@ async function api(path, opts={}){
 async function submitAuth(){
   try{
     msg("authMsg","","");
-    const password = document.getElementById("authPassword").value;
+    const password = authMode==="login" ? document.getElementById("authPassword").value : document.getElementById("regPassword").value;
     if(authMode==="login"){
       const login = document.getElementById("authLogin").value;
       const data = await api("/api/auth/login",{method:"POST",headers:headers(),body:JSON.stringify({login,password})});
       token=data.token; localStorage.setItem("taskora_token",token); await loadMe();
     }else{
+      if(!document.getElementById("regTerms").checked){
+        msg("authMsg", "error", "يجب الموافقة على الشروط والأحكام للمتابعة");
+        return;
+      }
+      const phoneInput = document.getElementById("regPhone").value.trim();
+      const countryCode = document.getElementById("regCountryCode").value;
+      const fullPhone = countryCode + phoneInput;
       const payload = {
         username: document.getElementById("regUsername").value,
         email: document.getElementById("regEmail").value,
-        phone: document.getElementById("regPhone").value,
+        phone: fullPhone,
         password,
         referral_code: document.getElementById("regReferral").value
       };
@@ -2384,6 +2745,7 @@ async function renderDashboard(dataFromMe){
 }
 function setDash(t){
   dash=t;
+  document.getElementById("dashMsg").classList.toggle("hidden", t !== "wallet");
   document.querySelectorAll(".user-nav").forEach(b=>b.classList.toggle("active",b.dataset.dash===t));
   document.querySelectorAll("[data-mobile-dash]").forEach(b=>b.classList.toggle("active",b.dataset.mobileDash===t));
   const titles = {
@@ -2400,7 +2762,7 @@ function setDash(t){
     settings:["الأمان وتأكيد البريد","تحكم بكلمة المرور وتأكيد البريد الإلكتروني."],
     help:["مركز المساعدة","إجابات سريعة وخطوات استخدام المنصة."],
     support:["الدعم الفني","أرسل تذكرة دعم وتابع الردود من الإدارة."],
-    admin:["لوحة الأدمن","مركز التحكم الإداري الاحترافي."]
+    admin:["لوحة الإدارة","مركز التحكم الإداري الاحترافي."]
   };
   document.getElementById("dashTitle").innerText = titles[t]?.[0] || "لوحة المستخدم";
   document.getElementById("dashSubtitle").innerText = titles[t]?.[1] || "";
@@ -2650,7 +3012,7 @@ async function renderWallet(){
         <label>المبلغ</label><input id="wdAmount" type="number" min="1">
         <label>عنوان محفظتك</label><input id="wdAddress"><label>تأكيد عنوان المحفظة</label><input id="wdConfirmAddress">
         <button class="btn primary full mt" onclick="withdraw()">طلب السحب</button>
-        <div class="notice mt">لا يمكن السحب إلا بعد قبول التوثيق من الأدمن.</div>
+        <div class="notice mt">لا يمكن السحب إلا بعد قبول التوثيق من الإدارة.</div>
       </div>
     </div>`;
   window.__wallets = w.wallets;
@@ -2837,8 +3199,8 @@ function renderHelp(){
     <div class="help-grid">
       <div class="faq-box"><h3>كيف أبدأ؟</h3><p>أنشئ حسابك، أكمل التوثيق، ثم أرسل إيداعك أو اختر باقة عندما يتوفر رصيد.</p></div>
       <div class="faq-box"><h3>لماذا السحب مغلق؟</h3><p>السحب يتطلب حسابًا موثقًا ورصيدًا متاحًا، مع تأكيد عنوان المحفظة.</p></div>
-      <div class="faq-box"><h3>كيف تعمل المهام؟</h3><p>كل باقة تحتوي 16 مهمة، وتظهر المهام حسب جدول الباقة اليومي.</p></div>
-      <div class="faq-box"><h3>ما العملات المدعومة؟</h3><p>USDT و BNB و ETH و BTC حسب المحافظ التي يحددها الأدمن.</p></div>
+      <div class="faq-box"><h3>كيف تعمل المهام؟</h3><p>كل باقة تحتوي 12 مهمة، وتظهر المهام حسب جدول الباقة اليومي.</p></div>
+      <div class="faq-box"><h3>ما العملات المدعومة؟</h3><p>USDT و BNB و ETH و BTC حسب المحافظ التي تحددها الإدارة.</p></div>
       <div class="faq-box"><h3>ماذا يحدث عند رفض السحب؟</h3><p>يتم إرجاع المبلغ المحجوز إلى الرصيد المتاح مع إشعار بسبب الرفض.</p></div>
       <div class="faq-box"><h3>كيف أستعيد كلمة المرور؟</h3><p>من صفحة الدخول اضغط نسيت كلمة المرور وأنشئ رابط استعادة.</p></div>
     </div>`;
@@ -2951,7 +3313,7 @@ async function renderAchievements(){
   const hasWithdrawal = tx.transactions.some(t=>String(t.type).includes("withdraw"));
   const list = [
     ["أول مهمة مكتملة","🎯",s.stats.completed_tasks>=1],
-    ["أكملت 16 مهمة","✅",s.stats.completed_tasks>=16],
+    ["أكملت 12 مهمة","✅",s.stats.completed_tasks>=12],
     ["أول إيداع","💳",hasDeposit],
     ["أول سحب","📤",hasWithdrawal],
     ["حساب موثق","🛡️",me.kyc_status==="verified"],
@@ -3327,13 +3689,13 @@ async function adminGolden(){
   markAdminNav("golden");
   const users=await api("/api/admin/users",{headers:headers()});
   const list=await api("/api/admin/golden",{headers:headers()});
-  adminBox.innerHTML = `<h3>المهام الذهبية</h3><div class="card"><label>المستخدم</label><select id="goldUser">${users.users.filter(u=>u.role!=="admin").map(u=>`<option value="${u.id}">${u.username} - ${u.email}</option>`).join("")}</select><label>العنوان</label><input id="goldTitle" value="المهمة الذهبية الأسبوعية"><label>الوصف</label><textarea id="goldDesc">مهمة ذهبية خاصة مرسلة من الأدمن.</textarea><label>الربح</label><input id="goldReward" type="number" value="10"><button class="btn amber mt" onclick="sendGolden()">إرسال</button></div><div class="table-wrap mt"><table><thead><tr><th>المستخدم</th><th>العنوان</th><th>الربح</th><th>الحالة</th><th>التاريخ</th></tr></thead><tbody>${list.golden_tasks.map(g=>`<tr><td>${g.username}</td><td>${g.title}</td><td class="money-cell">${money(g.reward)}</td><td>${g.status}</td><td>${new Date(g.sent_at).toLocaleString("ar")}</td></tr>`).join("")}</tbody></table></div>`;
+  adminBox.innerHTML = `<h3>المهام الذهبية</h3><div class="card"><label>المستخدم</label><select id="goldUser">${users.users.filter(u=>u.role!=="admin").map(u=>`<option value="${u.id}">${u.username} - ${u.email}</option>`).join("")}</select><label>العنوان</label><input id="goldTitle" value="المهمة الذهبية الأسبوعية"><label>الوصف</label><textarea id="goldDesc">مهمة ذهبية خاصة مرسلة من الإدارة.</textarea><label>الربح</label><input id="goldReward" type="number" value="10"><button class="btn amber mt" onclick="sendGolden()">إرسال</button></div><div class="table-wrap mt"><table><thead><tr><th>المستخدم</th><th>العنوان</th><th>الربح</th><th>الحالة</th><th>التاريخ</th></tr></thead><tbody>${list.golden_tasks.map(g=>`<tr><td>${g.username}</td><td>${g.title}</td><td class="money-cell">${money(g.reward)}</td><td>${g.status}</td><td>${new Date(g.sent_at).toLocaleString("ar")}</td></tr>`).join("")}</tbody></table></div>`;
 }
 async function sendGolden(){ try{ await api("/api/admin/golden",{method:"POST",headers:headers(),body:JSON.stringify({user_id:goldUser.value,title:goldTitle.value,description:goldDesc.value,reward:goldReward.value})}); await renderAdmin(); }catch(e){ toast(e.message, "error"); } }
 async function adminAdjustments(){
   markAdminNav("adjustments");
   const d=await api("/api/admin/balance-adjustments",{headers:headers()});
-  adminBox.innerHTML=`<h3>سجل تعديلات الأرصدة</h3><div class="table-wrap"><table><thead><tr><th>المستخدم</th><th>الحقل</th><th>الإجراء</th><th>المبلغ</th><th>قبل</th><th>بعد</th><th>الأدمن</th><th>الملاحظة</th><th>التاريخ</th></tr></thead><tbody>${d.adjustments.map(a=>`<tr><td>${a.username}<br>${a.email}</td><td>${a.field}</td><td>${a.action}</td><td class="money-cell">${money(a.amount)}</td><td class="money-cell">${money(a.balance_before)}</td><td class="money-cell">${money(a.balance_after)}</td><td>${a.admin_username||"-"}</td><td>${a.note||""}</td><td>${new Date(a.created_at).toLocaleString("ar")}</td></tr>`).join("")}</tbody></table></div>`;
+  adminBox.innerHTML=`<h3>سجل تعديلات الأرصدة</h3><div class="table-wrap"><table><thead><tr><th>المستخدم</th><th>الحقل</th><th>الإجراء</th><th>المبلغ</th><th>قبل</th><th>بعد</th><th>المشرف</th><th>الملاحظة</th><th>التاريخ</th></tr></thead><tbody>${d.adjustments.map(a=>`<tr><td>${a.username}<br>${a.email}</td><td>${a.field}</td><td>${a.action}</td><td class="money-cell">${money(a.amount)}</td><td class="money-cell">${money(a.balance_before)}</td><td class="money-cell">${money(a.balance_after)}</td><td>${a.admin_username||"-"}</td><td>${a.note||""}</td><td>${new Date(a.created_at).toLocaleString("ar")}</td></tr>`).join("")}</tbody></table></div>`;
 }
 
 
@@ -3370,7 +3732,7 @@ async function downloadAdminUsersCsv(){
 async function adminAuditLogs(){
   markAdminNav("audit");
   const d=await api("/api/admin/audit-logs",{headers:headers()});
-  adminBox.innerHTML=`<h3>سجل عمليات الأدمن</h3><div class="table-wrap"><table><thead><tr><th>الأدمن</th><th>الإجراء</th><th>الهدف</th><th>التفاصيل</th><th>التاريخ</th></tr></thead><tbody>${d.logs.map(l=>`<tr><td>${l.admin_username||"-"}</td><td>${l.action}</td><td>${l.target_type||""} #${l.target_id||""}</td><td><pre style="white-space:pre-wrap;direction:ltr;text-align:left">${escapeHtml(JSON.stringify(l.details||{},null,2))}</pre></td><td>${new Date(l.created_at).toLocaleString("ar")}</td></tr>`).join("")}</tbody></table></div>`;
+  adminBox.innerHTML=`<h3>سجل عمليات الإدارة</h3><div class="table-wrap"><table><thead><tr><th>المشرف</th><th>الإجراء</th><th>الهدف</th><th>التفاصيل</th><th>التاريخ</th></tr></thead><tbody>${d.logs.map(l=>`<tr><td>${l.admin_username||"-"}</td><td>${l.action}</td><td>${l.target_type||""} #${l.target_id||""}</td><td><pre style="white-space:pre-wrap;direction:ltr;text-align:left">${escapeHtml(JSON.stringify(l.details||{},null,2))}</pre></td><td>${new Date(l.created_at).toLocaleString("ar")}</td></tr>`).join("")}</tbody></table></div>`;
 }
 
 async function adminTransactions(){
@@ -3399,7 +3761,7 @@ async function openUserDetail(userId){
         <button onclick="renderUserDetailTab('withdrawals')">السحوبات</button>
         <button onclick="renderUserDetailTab('packages')">الباقات</button>
         <button onclick="renderUserDetailTab('transactions')">المعاملات</button>
-        <button onclick="renderUserDetailTab('adjustments')">تعديلات الرصيد</button><button onclick="renderUserDetailTab('notes')">ملاحظات الأدمن</button><button onclick="renderUserDetailTab('logins')">سجل الدخول</button>
+        <button onclick="renderUserDetailTab('adjustments')">تعديلات الرصيد</button><button onclick="renderUserDetailTab('notes')">ملاحظات المشرف</button><button onclick="renderUserDetailTab('logins')">سجل الدخول</button>
       </div>
       <div id="userDetailTab"></div>
       <div class="admin-actions mt"><button class="btn" onclick="closeAdminModal()">إغلاق</button></div>

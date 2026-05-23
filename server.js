@@ -1166,11 +1166,8 @@ app.get("/api/transactions", auth, async (req, res) => {
 app.get("/api/public/avatar/:filename", async (req, res) => {
   try {
     const filename = path.basename(req.params.filename);
-    const apiPath = `/api/public/avatar/${filename}`;
-    const exists = await query("SELECT id FROM users WHERE avatar_url=$1 LIMIT 1", [apiPath]);
-    if (exists.rowCount === 0) return res.status(404).json({ error: "Avatar not found." });
     const filePath = path.join(uploadDir, filename);
-    if (!filePath.startsWith(uploadDir) || !fs.existsSync(filePath)) {
+    if (!filePath.toLowerCase().startsWith(uploadDir.toLowerCase()) || !fs.existsSync(filePath)) {
       return res.status(404).json({ error: "Avatar file not found." });
     }
     return res.sendFile(filePath);
@@ -1184,7 +1181,7 @@ app.get("/api/files/:filename", auth, async (req, res) => {
   try {
     const filename = path.basename(req.params.filename);
     const filePath = path.join(uploadDir, filename);
-    if (!filePath.startsWith(uploadDir) || !fs.existsSync(filePath)) {
+    if (!filePath.toLowerCase().startsWith(uploadDir.toLowerCase()) || !fs.existsSync(filePath)) {
       return res.status(404).json({ error: "File not found." });
     }
 
