@@ -489,13 +489,14 @@ function publicUser(user) {
 }
 
 const PACKAGES = [
+  { id: "bronze", name: "البرونزية", price: 10, tasks: 12 },
   { id: "silver", name: "الفضية", price: 25, tasks: 12 },
   { id: "gold", name: "الذهبية", price: 50, tasks: 12 },
   { id: "platinum", name: "البلاتينيوم", price: 100, tasks: 12 },
   { id: "vip", name: "VIP", price: 500, tasks: 12 },
-  { id: "diamond", name: "الماسية", price: 1000, tasks: 12, monthly: true },
-  { id: "crown_vip", name: "VIP النخبة", price: 2000, tasks: 12, monthly: true },
-  { id: "royal_vip", name: "VIP التاج", price: 3000, tasks: 12, monthly: true }
+  { id: "diamond", name: "VIP النخبة", price: 1000, tasks: 12, monthly: true },
+  { id: "crown_vip", name: "VIP التاج", price: 2000, tasks: 12, monthly: true },
+  { id: "royal_vip", name: "VIP الملكية", price: 5000, tasks: 12, monthly: true }
 ];
 
 const DAILY_TASKS = [
